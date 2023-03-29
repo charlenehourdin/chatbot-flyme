@@ -24,6 +24,4 @@ class DefaultConfig:
     ## App Insight Service ##
     APPINSIGHTS_INSTRUMENTATION_KEY = os.environ.get(
         "APPINSIGHTSINSTRUMENTATIONKEY", "")
-    
-    
-   
+     APPINSIGHTS_INSTRUMENTATION = os.environ.get("APPINSIGHTS_INSTRUMENTATION", "")
