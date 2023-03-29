@@ -31,12 +31,17 @@ It can be used to book a travel with the following information :
 
 ## Task of project 
   
-- :heavy_check_mark: Perform Exploratory Data Analysis (EDA) and Data wrangling;
-- :heavy_check_mark: Build LUIS App;
-- :heavy_check_mark: Copy [Microsoft Core Bot Python Samples, including App Insights](https://github.com/microsoft/BotBuilder-Samples/tree/main/samples/python/21.corebot-app-insights) from Github, and adapt the scripts to the project's objectives;
-- :heavy_check_mark: Monitor the performance of the chatbot with App Insights;
-- :heavy_check_mark: Plan and integrate automated testing;
-- :heavy_check_mark: Embed in Azure Web App for model serving (deploy).
+:heavy_check_mark: Perform Exploratory Data Analysis (EDA) and Data wrangling;
+  
+:heavy_check_mark: Build LUIS App;
+  
+:heavy_check_mark: Copy [Microsoft Core Bot Python Samples, including App Insights](https://github.com/microsoft/BotBuilder-Samples/tree/main/samples/python/21.corebot-app-insights) from Github, and adapt the scripts to the project's objectives;
+  
+:heavy_check_mark: Monitor the performance of the chatbot with App Insights;
+  
+:heavy_check_mark: Plan and integrate automated testing;
+  
+:heavy_check_mark: Embed in Azure Web App for model serving (deploy).
 
 # :scroll: To try this sample
  
