@@ -23,4 +23,4 @@ class DefaultConfig:
     
     #APP INSIGHTS CONFIGURATION 
     APPINSIGHTS_INSTRUMENTATION_KEY = os.environ.get("APPINSIGHTS_INSTRUMENTATION_KEY", '07684d95-4649-4aad-9d19-4ed93838a246')
-    APPINSIGHTS_INSTRUMENTATION = os.environ.get("APPINSIGHTS_INSTRUMENTATION", "InstrumentationKey=07684d95-4649-4aad-9d19-4ed93838a246 ;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/;LiveEndpoint=https://eastus.livediagnostics.monitor.azure. com/")
+    
