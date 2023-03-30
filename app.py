@@ -75,18 +75,19 @@ BOT = DialogAndWelcomeBot(CONVERSATION_STATE, USER_STATE, DIALOG, TELEMETRY_CLIE
 # Listen for incoming requests on /api/messages.
 async def messages(req: Request) -> Response:
     # Main bot message handler.
-    if "Content-Type" in req.headers and "application/json" in req.headers["Content-Type"]:
+    if "application/json" in req.headers["Content-Type"]:
         body = await req.json()
     else:
         return Response(status=HTTPStatus.UNSUPPORTED_MEDIA_TYPE)
 
     activity = Activity().deserialize(body)
-    auth_header = req.headers.get("Authorization", "")
+    auth_header = req.headers["Authorization"] if "Authorization" in req.headers else ""
 
     response = await ADAPTER.process_activity(activity, auth_header, BOT.on_turn)
     if response:
         return json_response(data=response.body, status=response.status)
     return Response(status=HTTPStatus.OK)
+
 
 def init_func(argv):
     APP = web.Application(middlewares=[bot_telemetry_middleware, aiohttp_error_middleware])
