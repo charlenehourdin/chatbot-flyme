@@ -75,28 +75,18 @@ BOT = DialogAndWelcomeBot(CONVERSATION_STATE, USER_STATE, DIALOG, TELEMETRY_CLIE
 # Listen for incoming requests on /api/messages.
 async def messages(req: Request) -> Response:
     # Main bot message handler.
-    if "application/json" in req.headers["Content-Type"]:
+    if "Content-Type" in req.headers and "application/json" in req.headers["Content-Type"]:
         body = await req.json()
     else:
         return Response(status=HTTPStatus.UNSUPPORTED_MEDIA_TYPE)
 
     activity = Activity().deserialize(body)
-    auth_header = req.headers["Authorization"] if "Authorization" in req.headers else ""
+    auth_header = req.headers.get("Authorization", "")
 
     response = await ADAPTER.process_activity(activity, auth_header, BOT.on_turn)
     if response:
         return json_response(data=response.body, status=response.status)
     return Response(status=HTTPStatus.OK)
-
-
-# APP = web.Application(middlewares=[bot_telemetry_middleware, aiohttp_error_middleware])
-# APP.router.add_post("/api/messages", messages)
-
-# if __name__ == "__main__":
-#     try:
-#         web.run_app(APP, host='localhost', port=CONFIG.PORT)
-#     except Exception as error:
-#         raise error
 
 def init_func(argv):
     APP = web.Application(middlewares=[bot_telemetry_middleware, aiohttp_error_middleware])
