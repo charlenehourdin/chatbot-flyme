@@ -10,6 +10,9 @@ client_runtime = LUISRuntimeClient(endpoint=CONFIG.LUIS_API_ENDPOINT, credential
 
 # Test du intent "GreetingsIntent"
 def test_greetings_intent():
+    """
+    Test de l'intent "GreetingsIntent" avec la phrase "Hello".
+    """
     # On envoie une requête avec la phrase "Hello" à LUIS et on stocke la réponse.
     test_request = "Hello"
     test_response = client_runtime.prediction.resolve(CONFIG.LUIS_APP_ID, query=test_request)
@@ -19,8 +22,12 @@ def test_greetings_intent():
     actual_intent = test_response.top_scoring_intent.intent
     assert actual_intent == expected_intent
 
+
 # Test du intent "NoneIntent"
 def test_none_intent():
+    """
+    Teste si la requête "I need to book a hotel" retourne l'intent "NoneIntent" avec LUIS.
+    """
     # On envoie une requête avec la phrase "I need to book a hotel" à LUIS et on stocke la réponse.
     test_request = "I need to book a hotel"
     test_response = client_runtime.prediction.resolve(CONFIG.LUIS_APP_ID, query=test_request)
@@ -31,7 +38,10 @@ def test_none_intent():
     assert actual_intent == expected_intent
 
 # Test du intent "OrderTravelIntent"
-def test_order_travel_intent():
+def test_intent():
+    """
+    Teste si la requête "I want to book a trip" retourne l'intent "OrderTravelIntent" avec LUIS.
+    """
     # On envoie une requête avec la phrase "I want to book a trip" à LUIS et on stocke la réponse.
     test_request = "I want to book a trip"
     test_response = client_runtime.prediction.resolve(CONFIG.LUIS_APP_ID, query=test_request)
@@ -42,7 +52,10 @@ def test_order_travel_intent():
     assert actual_intent == expected_intent
 
 # Test de l'entity "DepartureCity"
-def test_order_travel_intent_origin_entity():
+def test_intent_origin_entity():
+    """
+    Teste si l'entity de type "DepartureCity" renvoie la valeur "tokyo" avec la requête "I have to leave Tokyo" et LUIS.
+    """
     # On envoie une requête avec la phrase "I have to leave Tokyo" à LUIS et on stocke la réponse.
     test_request = "I have to leave Tokyo"
     test_response = client_runtime.prediction.resolve(CONFIG.LUIS_APP_ID, query=test_request)
@@ -56,7 +69,10 @@ def test_order_travel_intent_origin_entity():
     assert actual_origin == expected_origin
 
 # Test de l'entity "ArrivalCity"
-def test_order_travel_intent_destination_entity():
+def test_destination_entity():
+    """
+    Teste si l'entity de type "ArrivalCity" renvoie la valeur "london" avec la requête "I want to travel to London" et LUIS.
+    """
     # On envoie une requête avec la phrase "I want to travel to London" à LUIS et on stocke la réponse.
     test_request = "I want to travel to London"
     test_response = client_runtime.prediction.resolve(CONFIG.LUIS_APP_ID, query=test_request)
@@ -70,7 +86,10 @@ def test_order_travel_intent_destination_entity():
     assert actual_destination == expected_destination
 
 # Test de l'entity "DepartureDate" et ArrivalDate
-def test_order_travel_intent_travel_dates_entity():
+def test_dates_entity():
+    """
+    Test si les entities "DepartureDate" et "ArrivalDate" sont correctement identifiées par LUIS.
+    """
     # On envoie une requête avec la phrase "I want to book a trip from 01 July 2023 to 30 July 2023" à LUIS et on stocke la réponse.
     test_request = "I want to book a trip from 01 July 2023 to 30 July 2023"
     test_response = client_runtime.prediction.resolve(CONFIG.LUIS_APP_ID, query=test_request)
@@ -90,5 +109,6 @@ def test_order_travel_intent_travel_dates_entity():
     # On vérifie que les réponses correspondent bien à ce qu'on attend.
     assert actual_start_travel_date == expected_start_travel_date
     assert actual_end_travel_date == expected_end_travel_date
+
 
 
