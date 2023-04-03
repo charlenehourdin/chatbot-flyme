@@ -187,6 +187,19 @@ class BookingDialog(CancelAndHelpDialog):
         booking_info["end_travel_date"] = booking_details.end_travel_date
         booking_info["budget"] = booking_details.budget
 
+        if step_context.result:
+            # send insights event that booking was confirmed by user
+            self.telemetry_client.track_event("BookingConfirmed", properties=booking_details.__dict__)
+            self.telemetry_client.flush()
+
+            return await step_context.end_dialog(booking_details)
+    
+        self.telemetry_client.track_event("BookingRefused", properties=booking_details.__dict__)
+        self.telemetry_client.flush()
+
+        return await step_context.end_dialog()
+
+
     def is_ambiguous(self, timex: str) -> bool:
         """Ensure time is correct."""
         timex_property = Timex(timex)
