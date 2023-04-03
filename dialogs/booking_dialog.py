@@ -176,45 +176,31 @@ class BookingDialog(CancelAndHelpDialog):
 
     async def final_step(self, step_context: WaterfallStepContext) -> DialogTurnResult:
         """Complete and tracing for monitoring"""
-        self.chat_history["chat_validation_by_user"] = step_context._turn_context.activity.text
 
+        self.chat_history["chat_validation_by_user"] = step_context._turn_context.activity.text
         booking_details = step_context.options
 
-        booking_info = {}
-        booking_info["origin"] = booking_details.origin
-        booking_info["destination"] = booking_details.destination
-        booking_info["start_travel_date"] = booking_details.start_travel_date
-        booking_info["end_travel_date"] = booking_details.end_travel_date
-        booking_info["budget"] = booking_details.budget
-
-    async def final_step(self, step_context: WaterfallStepContext) -> DialogTurnResult:
-        """Complete and tracing for monitoring"""
-        self.chat_history["chat_validation_by_user"] = step_context._turn_context.activity.text
-
-        booking_details = step_context.options
-
-        booking_info = {}
-        booking_info["origin"] = booking_details.origin
-        booking_info["destination"] = booking_details.destination
-        booking_info["start_travel_date"] = booking_details.start_travel_date
-        booking_info["end_travel_date"] = booking_details.end_travel_date
-        booking_info["budget"] = booking_details.budget
+        booking_info = {
+            "origin": booking_details.origin,
+            "destination": booking_details.destination,
+            "start_travel_date": booking_details.start_travel_date,
+            "end_travel_date": booking_details.end_travel_date,
+            "budget": booking_details.budget,
+        }
 
         if step_context.result:
-            # send insights event that booking was confirmed by user
-            self.telemetry_client.track_event("BookingConfirmed", properties=booking_details.__dict__)
-            self.telemetry_client.flush()
-            self.logger.info("Booking confirmed by user")
             self.telemetry_client.track_metric("TransactionConfirmed", 1, properties=booking_info)
             self.telemetry_client.track_metric("ChatHistory", 1, properties=self.chat_history)
-            return await step_context.end_dialog(booking_details)
+            self.telemetry_client.track_event("BookingConfirmed", properties=booking_details.__dict__)
+        else:
+            self.telemetry_client.track_metric("TransactionDismissed", 1, properties=booking_info, severity_level="ERROR")
+            self.telemetry_client.track_metric("ChatError", 1, properties=self.chat_history, severity_level="ERROR")
+            self.telemetry_client.track_event("BookingRefused", properties=booking_details.__dict__)
 
-        self.telemetry_client.track_event("BookingRefused", properties=booking_details.__dict__)
         self.telemetry_client.flush()
-        self.logger.error("Booking refused by user")
-        self.telemetry_client.track_metric("TransactionDismissed", 1, properties=booking_info, severity_level="Error")
-        self.telemetry_client.track_metric("ChatError", 1, properties=self.chat_history, severity_level="Error")
-        return await step_context.end_dialog()
+        return await step_context.end_dialog()    
+
+
 
 
 
