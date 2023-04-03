@@ -212,8 +212,8 @@ class BookingDialog(CancelAndHelpDialog):
         self.telemetry_client.track_event("BookingRefused", properties=booking_details.__dict__)
         self.telemetry_client.flush()
         self.logger.error("Booking refused by user")
-        self.telemetry_client.track_metric("TransactionDismissed", 1, properties=booking_info, severity_level=Severity.ERROR)
-        self.telemetry_client.track_metric("ChatError", 1, properties=self.chat_history, severity_level=Severity.ERROR)
+        self.telemetry_client.track_metric("TransactionDismissed", 1, properties=booking_info, severity_level="Error")
+        self.telemetry_client.track_metric("ChatError", 1, properties=self.chat_history, severity_level="Error")
         return await step_context.end_dialog()
 
 
