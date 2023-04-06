@@ -189,16 +189,13 @@ class BookingDialog(CancelAndHelpDialog):
         }
 
         if step_context.result:
-            self.telemetry_client.track_metric("TransactionConfirmed", 1, properties=booking_info)
-            self.telemetry_client.track_metric("ChatHistory", 1, properties=self.chat_history)
-            self.telemetry_client.track_event("BookingConfirmed", properties=booking_details.__dict__)
-        else:
-            self.telemetry_client.track_metric("TransactionDismissed", 1, properties=booking_info, severity_level="ERROR")
-            self.telemetry_client.track_metric("ChatError", 1, properties=self.chat_history, severity_level="ERROR")
-            self.telemetry_client.track_event("BookingRefused", properties=booking_details.__dict__)
-
-        self.telemetry_client.flush()
-        return await step_context.end_dialog()    
+                self.telemetry_client.track_trace("TransactionConfirmed : YES", booking_info, "INFO")
+                self.telemetry_client.track_trace("ChatHistory", self.chat_history, "INFO")
+                return await step_context.end_dialog(booking_details)
+            else:
+                self.telemetry_client.track_trace("TransactionDismissed : NO", booking_info, "ERROR")
+                self.telemetry_client.track_trace("ChatHistory", self.chat_history, "ERROR")
+                return await step_context.end_dialog()
 
 
 
