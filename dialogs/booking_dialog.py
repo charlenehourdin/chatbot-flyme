@@ -66,7 +66,7 @@ class BookingDialog(CancelAndHelpDialog):
             return await step_context.prompt(
                 TextPrompt.__name__,
                 PromptOptions(
-                    prompt=MessageFactory.text("From which city would you like to leave?")
+                    prompt=MessageFactory.text("From what city will you be travelling?")
                 ),
             )  # pylint: disable=line-too-long,bad-continuation
 
@@ -85,7 +85,7 @@ class BookingDialog(CancelAndHelpDialog):
             return await step_context.prompt(
                 TextPrompt.__name__,
                 PromptOptions(
-                    prompt=MessageFactory.text("To which city would you like to go?")
+                    prompt=MessageFactory.text("To which city do you want to go?")
                 ),
             )  # pylint: disable=line-too-long,bad-continuation
 
@@ -174,19 +174,20 @@ class BookingDialog(CancelAndHelpDialog):
             ConfirmPrompt.__name__, PromptOptions(prompt=MessageFactory.text(msg))
         )
 
+    
     async def final_step(self, step_context: WaterfallStepContext) -> DialogTurnResult:
-        """Complete and tracing for monitoring"""
-
+        """Complete the interaction, create trace for monitoring and end the dialog."""
         self.chat_history["chat_validation_by_user"] = step_context._turn_context.activity.text
+
         booking_details = step_context.options
 
-        booking_info = {
-            "origin": booking_details.origin,
-            "destination": booking_details.destination,
-            "start_travel_date": booking_details.start_travel_date,
-            "end_travel_date": booking_details.end_travel_date,
-            "budget": booking_details.budget,
-        }
+        booking_info = {}
+        booking_info["origin"] = booking_details.origin
+        booking_info["destination"] = booking_details.destination
+        booking_info["start_travel_date"] = booking_details.start_travel_date
+        booking_info["end_travel_date"] = booking_details.end_travel_date
+        booking_info["budget"] = booking_details.budget
+
 
         if step_context.result:
             self.telemetry_client.track_trace("TransactionConfirmed : YES", booking_info, "INFO")
